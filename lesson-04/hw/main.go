@@ -1,14 +1,14 @@
 package main
 
 import (
-	"os"
-	"io"
 	"bufio"
+	"io"
+	"os"
 	"time"
 )
 
 const (
-	inputFilename = "./input.txt"
+	inputFilename  = "./input.txt"
 	outputFilename = "./output.txt"
 )
 
@@ -59,11 +59,11 @@ func main() {
 	}
 }
 
-func sendDataToChannel(ch chan <- []byte, d []byte) {
+func sendDataToChannel(ch chan<- []byte, d []byte) {
 	ch <- d
 }
 
-func writeDataToWriter(byteCh <- chan []byte, writer io.Writer) {
+func writeDataToWriter(byteCh <-chan []byte, writer io.Writer) {
 	for d := range byteCh {
 		writer.Write(d)
 	}

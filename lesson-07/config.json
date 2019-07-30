@@ -1,0 +1,23 @@
+{
+  "interface": ":8080",
+  "upstreams": [
+    {
+      "path": "/example1",
+      "method": "GET",
+      "backends": [
+        "http://server1.com:9080/asd",
+        "http://server2.com:9080/asd"
+      ],
+      "proxyMethod": "round-robin"
+    },
+    {
+      "path": "",
+      "method": "GET",
+      "backends": [
+        "http://server1.com:9080/asd",
+        "http://server2.com:9080/asd"
+      ],
+      "proxyMethod": "anycast"
+    }
+  ]
+}
