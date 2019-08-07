@@ -3,19 +3,15 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
+	time.Sleep(5 * time.Second)
 	w.Write([]byte("pong"))
 }
 
-type FibNumber struct {
-	Current int
-	Prev int
-	Next int
-}
-
 func main() {
-	http.HandleFunc("/fibbonaci/4", handler)
+	http.HandleFunc("/", handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
