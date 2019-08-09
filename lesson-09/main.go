@@ -36,22 +36,24 @@ func main() {
 		IdleTimeout:  15 * time.Second,
 	}
 	go func() {
-		log.Fatal(server.ListenAndServe())
+		log.Println("server started")
+		stop := make(chan os.Signal, 1)
+		signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+		<-stop
+
+		time.Sleep(10 * time.Second)
+		log.Println("received stop signal")
+
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		log.Println("call to shutdown")
+		if err := server.Shutdown(ctx); err != nil {
+			log.Printf("Error: %v\n", err)
+		} else {
+			log.Println("Server stopped")
+		}
 	}()
-	log.Println("server started")
-	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
-	<-stop
-	log.Println("received stop signal")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	log.Println("call to shutdown")
-	if err := server.Shutdown(ctx); err != nil {
-		log.Printf("Error: %v\n", err)
-	} else {
-		log.Println("Server stopped")
-	}
-	time.Sleep(5 * time.Second)
+	log.Fatal(server.ListenAndServe())
 }
